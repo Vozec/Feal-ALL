@@ -1,26 +1,23 @@
 from FEAL.utils import *
 
-class Feal_N():
-	def __init__(self,rounds,key):
-		assert rounds > 4, 'Number of Round must be > 4'
+class Feal_4():
+	def __init__(self,key):
 		assert len(key) == 8, 'Key must be 8 characters.'
-
-		self.N = rounds
+		self.N = 4
 		self.key = key
-		self.subkey = self.key_generation(key,rounds)
-		
+		self.subkey = self.key_generation(key)
+		assert len(self.subkey) == (self.N + 2)*4
 
-	def key_generation(self,key,rounds):
+	def key_generation(self,key,rounds=4):
 		# https://link.springer.com/content/pdf/10.1007/3-540-38424-3_46.pdf
 		subkeys = [0] * (rounds//2+4)
 
 		Kl,Kr   = key[:8],[0]*8
 		Kr1,Kr2 = Kr[:4],Kr[4:]
 		Qr 		= xor(Kr1,Kr2)
-	
+
 		A0,B0 	= Kl[:4],Kl[4:]
 		D0 = [0]*4
-
 		for i in range(rounds//2+4):
 			if(i % 3 == 1):		xored = xor(B0,Kr1)
 			elif(i % 3 == 0):	xored = xor(B0,Qr)
@@ -37,7 +34,7 @@ class Feal_N():
 
 		return subkeys
 
-	# https://doc.lagout.org/security/Crypto/XXXX_FEAL.pdf
+	# # http://www.theamazingking.com/images/crypto-feal2.JPG
 	def encrypt(self,data):
 		pad   = lambda data : data + bytes([0x00 for _ in range((8-len(data))%8)])
 		split = lambda L_R:(L_R[:4],L_R[4:])
@@ -48,19 +45,17 @@ class Feal_N():
 			bloc = data[k*8:(k+1)*8]
 			L,R = split(bloc)
 
-			L,R = split(xor(L+R,self.subkey[-2*8:-8]))
+			L = xor(L,self.subkey[-2*4:-4])
+			R = xor(R,self.subkey[-4:])
 			R = xor(L,R)
 
 			for i in range(self.N):
-				# L = xor(L,F1(xor(R,self.subkey[i*4:(i+1)*4])))
-				L = xor(L,F2(R,self.subkey[i*2:(i+1)*2]))
+				L = xor(L,F1(xor(R,self.subkey[i*4:(i+1)*4])))
 				L,R = R,L
 			
 			L,R = R,L
 			R = xor(R,L)
 
-			if self.N > 4:
-				L,R = split(xor(L+R,self.subkey[-8:]))
 			result += L+R
 
 		return bytes(result)
@@ -71,18 +66,16 @@ class Feal_N():
 		for k in range(len(data)//8):
 			bloc = data[k*8:(k+1)*8]
 			L,R = split(bloc)
-
-			if self.N > 4:
-				L,R = split(xor(L+R,self.subkey[-8:]))
-
 			R = xor(L,R)
 			L,R = R,L
 			for i in reversed(range(self.N)):
 				L,R = R,L
-				L = xor(L,F2(R,self.subkey[i*2:(i+1)*2]))
+				L = xor(L,F1(xor(self.subkey[i*4:(i+1)*4],R)))
 			
 			R = xor(R,L)
-			L,R = split(xor(L+R,self.subkey[-2*8:-8]))
+			R = xor(R,self.subkey[-4:])
+			L = xor(L,self.subkey[-2*4:-4])
+
 			result += L+R
 		return bytes(result).strip(b'\x00')
 
