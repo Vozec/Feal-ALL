@@ -1,9 +1,9 @@
 # Feal-ALL
-This tool is the implementation of the FEAL NX / FEAL N and FEAL-4 encryption   
-Feal-NX is the latest version of FEAL encryption,supporting 128 bits key .
-Feal-N is a similar version , restricte to 64 bits keys.
-Feal-4 is similar to Feal-N with a small difference with the F-box & last xor at the end of the encypt function
-- *N is the number of rounds.*
+This tool is the implementation of the FEAL NX / FEAL N and FEAL-4 encryption    
+Feal-NX is the latest version of FEAL encryption,supporting 128 bits key .  
+Feal-N is a similar version , restricte to 64 bits keys.  
+Feal-4 is similar to Feal-N with a small difference with the F-box & last xor at the end of the encypt function  
+- *N is the number of rounds.*  
 
 This tool is based on these papers : 
 - [FEAL-NX SPECIFICATIONS](https://info.isl.ntt.co.jp/crypt/eng/archive/dl/feal/call-3e.pdf)
