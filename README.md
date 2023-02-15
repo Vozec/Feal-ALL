@@ -5,12 +5,12 @@ Feal-N is a similar version , restricte to 64 bits keys.
 Feal-4 is similar to Feal-N with a small difference with the F-box & last xor at the end of the encypt function
 - *N is the number of rounds.*
 
-L'outil est basé sur ces papier : 
+This tool is based on these papers : 
 - [FEAL-NX SPECIFICATIONS](https://info.isl.ntt.co.jp/crypt/eng/archive/dl/feal/call-3e.pdf)
 - [The FEAL Cipher Family](https://link.springer.com/content/pdf/10.1007/3-540-38424-3_46.pdf)
 - [L'article de TheAmazingKing](http://www.theamazingking.com/crypto-feal.php)
 
-*(Toutes les étapes du code Feal NX sont détaillé pour comprendre le chiffrement avec le papier à coté)*
+*(All the steps of the Feal NX code are detailed to understand the encryption with the paper next to it)*
 
 ## Example :
 
@@ -66,4 +66,4 @@ Plain  Text: b'Hello This Is Vozec !'
 ```
 
 ## Test : 
-Tous les tests présenté dans les pdf pour feal_nx & feal_n sont effectués dans *test.py*
+All tests presented in the pdf for feal_nx & feal_n are performed in *test.py*
