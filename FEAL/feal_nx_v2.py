@@ -109,7 +109,7 @@ class Feal_NX():
 		R ^= join(*self.subkey[self.N+2:self.N+4], 16)			# (L0, R0) = (L0, R0) ⊕ (K32, K33, K34, K35 )
 		L ^= join(*self.subkey[self.N+0:self.N+2], 16)
 
-		return int2bytes((R << 32) | L, 8)
+		return int2bytes((L << 32) | R, 8)
 
 
 	def encrypt(self,data):
